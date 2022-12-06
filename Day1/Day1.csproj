@@ -5,6 +5,14 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <BaseOutputPath>out/bin/</BaseOutputPath>
+    <BaseIntermediateOutputPath>out/obj/</BaseIntermediateOutputPath>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="Data\input.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>
