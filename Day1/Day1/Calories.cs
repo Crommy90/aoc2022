@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Day1
+namespace AOC2022.Day1
 {
     public class Calories
     {
