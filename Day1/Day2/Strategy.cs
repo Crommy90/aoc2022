@@ -13,42 +13,96 @@ namespace AOC2022.Day2
         Scissors = 3
     }
 
+    enum RoundOutcome
+    {
+        Lose,
+        Draw,
+        Win
+    }
+
+    enum StrategyMode
+    {
+        Response,
+        Outcome
+    }
+
+    class RPSDict
+    {
+        public static Dictionary<char, RPS> Dict = new Dictionary<char, RPS>
+        {
+            { 'A', RPS.Rock },
+            { 'B', RPS.Paper },
+            { 'C', RPS.Scissors },
+            { 'X', RPS.Rock },
+            { 'Y', RPS.Paper },
+            { 'Z', RPS.Scissors },
+        };
+        
+        public static Dictionary<char, RoundOutcome> OutcomeDict = new Dictionary<char, RoundOutcome>
+        {
+            { 'X', RoundOutcome.Lose },
+            { 'Y', RoundOutcome.Draw },
+            { 'Z', RoundOutcome.Win },
+        };
+    };
+
+
     internal class Strategy
     {
 
-        public RPS Opponent { get; set; }
-        public RPS Response { get; set; }
+        private RPS _opponent;
+        private RPS _response;
 
-        
 
-        public Strategy( string line )
+        public Strategy(string line, StrategyMode mode)
         {
-            Dictionary<char, RPS> rpsDict = new Dictionary<char, RPS>
+
+            _opponent = RPSDict.Dict[line[0]];
+            if (mode == StrategyMode.Response)
             {
-                { 'A', RPS.Rock },
-                { 'B', RPS.Paper },
-                { 'C', RPS.Scissors },
-                { 'X', RPS.Rock },
-                { 'Y', RPS.Paper },
-                { 'Z', RPS.Scissors },
-            };
-            Opponent = rpsDict[line[0]];
-            Response = rpsDict[line[2]];
+                _response = RPSDict.Dict[line[2]];
+            }
+            else
+            {
+                RoundOutcome outcome = RPSDict.OutcomeDict[line[2]];
+                switch (outcome)
+                {
+                    case RoundOutcome.Lose:
+                        _response = (RPS)((((int)_opponent) - 1) % 3);
+                        if ((int)_response == 0)
+                        {
+                            _response += 3;
+                        }
+                        break;
+                    case RoundOutcome.Draw:
+                        _response = _opponent;
+                        break;
+                    case RoundOutcome.Win:
+                        _response = (RPS) ((((int)_opponent) + 1) % 4);
+                        if ((int)_response == 0)
+                        {
+                            ++_response;
+                        }
+                        break;
+                }
+                
+            }
         }
 
         public int GetScore()
         {
-            int score = (int) Response;
-            if( Response == Opponent )
+            int score = (int) _response;
+            if( _response == _opponent )
             {
                 score+=3;
             }
-            if( ((int) Response - 1) == (int) Opponent
-                || (Response == RPS.Rock && Opponent == RPS.Scissors))
+            if( ((int) _response - 1) == (int) _opponent
+                || (_response == RPS.Rock && _opponent == RPS.Scissors))
             {
                 score += 6;
             }
             return score;
         }
     }
+
 }
